@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
@@ -16,15 +14,14 @@ import at.fhooe.mc.jetpack.Constants.HTTP_BASE_URL
 import at.fhooe.mc.jetpack.Constants.TAG
 import at.fhooe.mc.jetpack.ui.theme.JetpackComposeGitTheme
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.openapitools.client.apis.BlogApi
+import org.openapitools.client.apis.BlogPostApi
 
 const val TAG_MAIN_ACTIVITY = "MainActivity"
 
 class MainActivity : ComponentActivity() {
 
-    private val blogApi = BlogApi(HTTP_BASE_URL) // use for api calls
+    private val blogPostApi = BlogPostApi(HTTP_BASE_URL) // use for api calls
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +29,7 @@ class MainActivity : ComponentActivity() {
 
         // network call on IO thread
         lifecycleScope.launch(Dispatchers.IO) {
-            val blogPosts = blogApi.blogBlogPostsGet()
+            val blogPosts = blogPostApi.blogPostGet()
 
             // back to UI thread
             runOnUiThread {
