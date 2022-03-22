@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -62,11 +63,22 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 
+    // region lifecycle (for coroutines)
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
+    // endregion
 
-    // OpenAPI libs
+    // region OpenAPI libs
     implementation "com.squareup.moshi:moshi-kotlin:1.11.0"
     implementation "com.squareup.moshi:moshi-adapters:1.11.0"
     implementation "com.squareup.okhttp3:okhttp:4.9.0"
+    // endregion
+
+    // region Room DB
+    def roomVersion = "2.4.2"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+    // endregion
+
 }
