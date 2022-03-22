@@ -1,0 +1,25 @@
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings}
+
+\lstdefinelanguage{Kotlin}{
+  comment=[l]{//},
+  commentstyle={\color{ForestGreen}\ttfamily},
+  emph={value, onValueChange},
+  emphstyle={\color[HTML]{467CDA}},
+  identifierstyle=\color{black},
+  keywords={!in, !is, abstract, actual, annotation, as, as?, break, by, catch, class, companion, const, constructor, continue, crossinline, data, delegate, do, dynamic, else, enum, expect, external, false, field, file, final, finally, for, FROM, fun, get, if, import, in, infix, init, inline, inner, interface, internal, is, lateinit, noinline, null, object, open, operator, out, override, package, param, private, property, protected, public, receiveris, reified, return, return@, sealed, SELECT, set, setparam, super, suspend, tailrec, this, throw, true, try, typealias, typeof, val, var, vararg, when, where, while},
+  keywordstyle={\color[HTML]{C57531}\bfseries},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  morestring=[s]{"""*}{*"""},
+  ndkeywords={@Deprecated, @Composable, @Query, @Insert, @Dao, OnConflictStrategy},
+  ndkeywordstyle={\color[HTML]{BBB429}\bfseries},
+  sensitive=true,
+  stringstyle={\color{ForestGreen}\ttfamily},
+  classoffset=2,
+  morekeywords={padding, items, NavHost, composable},
+  keywordstyle={\color[HTML]{FBC36B}\bfseries},
+  classoffset=3,
+  morekeywords={REPLACE},
+  keywordstyle={\color[HTML]{9B81BC}\itshape}
+}

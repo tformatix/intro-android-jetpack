@@ -1,0 +1,133 @@
+\subsection{Jetpack Compose}
+\label{cha:compose}
+
+The biggest renewal of the Android framework comes with Jetpack Compose. Compose is a new UI framework for Android. According to the statements of Google \cite{android_jetpack_compose} the framework speeds up UI development, requires less code, and has many powerful tools.
+
+Compared to building the UI implicitly in XML files, Jetpack Compose is meant to be declarative. Declarative UI allows to put design and programmatic logic in one single file  \cite{android_jetpack_compose}. Some other popular examples using this approach are React, Flutter, SwiftUI and many more.
+
+\noindent
+The main benefits according to the "Android for Developers" web page \cite{android_jetpack_compose} are:
+\begin{itemize}
+    \item less Code
+    \item intuitive
+    \begin{itemize}
+        \item writing code in Kotlin (declarative)
+        \item Android takes care of the rest
+    \end{itemize}
+    \item accelerate Development
+    \item powerful
+    \item performs better than XML
+    \item usage alongside existing code
+    \item test integration
+\end{itemize}
+
+Besides the list of advantages, there are also some drawbacks of using Jetpack Compose:
+
+\begin{itemize}
+    \item a lot of magic happens in the background
+    \item difficult to understand
+    \item the preview is in a early state and leads to some teething troubles \\
+\end{itemize}
+
+\noindent
+\textbf{Declarative Programming Paradigm}
+
+In the old approach (imperative), the layout is built with a tree of UI widgets. There, the state changes of the application need to be updated manually with methods like \lstinline[language=Kotlin]{setText(String)} or \lstinline[language=Kotlin]{setVisibility(Integer)}. This technique is very error prone because a update of those widgets could be missing at some point. Another error cause is that the view was removed from the UI and creates an illegal state \cite{android_thinking_in_compose}.
+
+To avoid these errors, the declarative approach has been developed in recent years. This approach describes the desired end result and what it should look like, instead of listing all the execution steps that would lead to a result. On every state change the entire screen gets regenerated from scratch which could be very expensive in terms of time, computing power and battery usage. Therefore Compose tries in the Recomposition process to choose the parts which have to be redrawn and the other ones are skipped. Recomposition is performed only on objects that are intended to change. \cite{android_thinking_in_compose}. \\
+
+\noindent
+\textbf{Composable Functions}
+
+The basic functionality of Compose is relying on composable functions. Composable functions convert data into UI elements, so they may have parameters and they do not return anything. Instead of returning something, the functions are describing the screen state instead of building UI widgets. These functions are annotated with \lstinline[language=Kotlin]{@Composable} annotation. Another important fact is that it is not possible to set or get the function. It simply can be overwritten by calling the same functions with other arguments \cite{android_thinking_in_compose}.
+
+A simple composable function that displays "Hello" with a name specified in the parameter:
+
+\begin{lstlisting}[language=Kotlin]
+@Composable
+fun Greeting(name: String) {
+    Text("Hello $name!")
+}
+\end{lstlisting}
+
+In the matter of fact that composable functions are written in Kotlin, it is possible to use loops (for, while, \ldots), contitions (if, when, \ldots) or any other logical construct \cite{android_thinking_in_compose}. \\
+
+\noindent
+Some other important facts from the Google documentation \cite{android_thinking_in_compose} are as follows:
+\begin{itemize}
+    \item Composable functions can execute in any order and parallel
+    \item Recomposition ignores composable functions and lambdas where possible
+    \item Recomposition is optimistic (restarts recomposition again whenever a new parameter arrives)
+    \item Composable functions should be very fast as they might run quite frequently (can lead to poor performance if this is not followed) \\
+\end{itemize}
+
+\noindent
+\textbf{Managing States}
+
+The only way to update the UI is by calling the same composable with new arguments \cite{android_state_compose}. For state changes, functionality is needed that saves a state and calls the current composable again with new arguments to redraw the UI. This basic functionality is implemented as follows:
+
+\noindent
+\lstinline[language=Kotlin]|var state by remember {mutableStateOf("")}| \\
+
+A composable function can store a single object in memory by usage by of \lstinline[language=Kotlin]|remember| keyword. During composition the value is stored and the value gets returned while recomposition. Therefore, the value can be used with the variable (for example \lstinline[language=Kotlin]{state}) during the recomposition process.
+
+The delegated property \lstinline[language=Kotlin]|mutablestateof| creates a observable which would schedule a recomposition of any composable function which reads the changed value. \cite{android_state_compose}
+
+An example of saving the state of a text field and using the "Greeting" function shown earlier:
+
+\begin{lstlisting}[language=Kotlin]
+@Composable
+fun SomeInputText() {
+    var name by remember { 
+        mutableStateOf("World") 
+    }
+    
+    Greeting(name)
+    TextField(
+        value = name,
+        onValueChange = { name = it }
+    )
+}
+\end{lstlisting}
+
+\noindent
+\textbf{Phases}
+
+Jetpack Compose renders each frame in three different phases. In the standard Android View system, the three phases are called Measure -- Layout -- Drawing. Instead of the Measure phases, Compose has a phase called Composition.
+
+The phases mentioned in the Android Developer platform \cite{android_compose_phases} are as follows:
+
+\begin{itemize}
+    \item Composition: Which parts of the user interface should be displayed?
+    \item Layout: Where to place objects on the UI?
+    \item Drawing: How to render the UI?  \\
+\end{itemize}
+
+\noindent
+\textbf{Architectural Layering}
+
+Since Jetpack Compose consists of more than one project, it is assembled from several modules to form a complete stack.
+
+\noindent
+The major layers are \cite{android_compose_layering}:
+\begin{itemize}
+    \item Material: implementation of Material Design (theming system, designed components, ripple displays, icons, \ldots)
+    \item Foundation: system independent building blocks (\lstinline[language=Kotlin]|Row|, \lstinline[language=Kotlin]|Column|, \lstinline[language=Kotlin]|LazyColumn|, \ldots)
+    \item UI: basic UI capabilities (\lstinline[language=Kotlin]|Modifier|, \ldots)
+    \item Runtime: provides fundamental functionality (\lstinline[language=Kotlin]|remember|, \lstinline[language=Kotlin]|mutableStateOf|, \lstinline[language=Kotlin]|@Composable|, \ldots) 
+\end{itemize}
+
+\noindent
+\textbf{Example of the "new" RecyclerView}
+
+RecyclerView were used to represent a list of data on the UI. Every old RecyclerView needs an Adapter with a ViewHolder and produces much boiler plate code. Compose introduces the \lstinline[language=Kotlin]|LazyColumn| and \lstinline[language=Kotlin]|LazyRow| and therefore no longer requires RecyclerViews.
+
+An example of creating a list with LazyColumn:
+
+\begin{lstlisting}[language=Kotlin]
+LazyColumn(Modifier.padding(it)){
+    items(someList) { someItem ->
+        Text(someItem)
+    }
+}
+\end{lstlisting}

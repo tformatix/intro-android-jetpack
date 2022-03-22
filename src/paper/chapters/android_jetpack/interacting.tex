@@ -1,0 +1,18 @@
+\subsection{Interacting with ViewModels and Kotlin Flows}
+\label{cha:jetpack_interacting}
+
+\noindent
+\textbf{Asynchronous Data}
+
+Flow is a datatype introduced in Kotlin Coroutines and it is used to collect data which changes in the background (e.g.: updating news from a website). Normally non-simultaneous functions return a single value, but what if you need multiple values? This is where Flow comes into action. It generates a continuous data stream where you can attach to it and collect its asynchronous data. A Flow consists of two parts\cite{android_flows}:
+\begin{itemize}
+    \item \textit{producer}: provides the data stream (mostly asynchronous due to Coroutines) using \textit{emit()}
+    \item \textit{consumer}: fetches the data and do other processing (e.g: displaying in UI) using \textit{collect()} \\
+\end{itemize}
+
+\noindent
+\textbf{ViewModel}
+
+A ViewModel is designed to store and handle UI relevant data in an application, taking into account the Android lifecycle. It holds the states and values of its objects (e.g.: like a Flow list of news) regardless of system configuration changes (e.g.: changing screen orientation). ViewModel is a observable holder for data and you can get notified when the data changes. In a modern application architecture a ViewModel transforms the data from a repository (local or remote source) to a Flow/LiveData list. When ever the list content changes it will update the UI.
+
+A \lstinline[language=Kotlin]|@Composable| function can collect the asynchronous data from a ViewModel as a state. Whenever a change in the data is recognized, the value of the variable will be changed and it will automatically update the UI (if the data needs to be displayed)

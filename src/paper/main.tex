@@ -1,0 +1,67 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+
+\input{kotlin_listing_style}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    frame=single,
+    numbers=left,
+    numbersep=5pt,
+    numberstyle=\tiny\color{gray},
+    showspaces=false,
+    showstringspaces=false,
+    tabsize=1,
+    xleftmargin=10pt,
+}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{Android Jetpack}
+
+\author{
+    \IEEEauthorblockN{Tobias Fischer}
+    \IEEEauthorblockA{
+        University of Applied Sciences Upper Austria \\
+        Faculty for Informatics, Communications and Media\\
+        Degree in Mobile Computing\\
+        4232 Hagenberg, Austria\\
+        s2010237030@fhooe.at
+    } 
+    \and
+    \IEEEauthorblockN{Michael Zauner}
+    \IEEEauthorblockA{
+        University of Applied Sciences Upper Austria \\
+        Faculty for Informatics, Communications and Media\\
+        Degree in Mobile Computing\\
+        4232 Hagenberg, Austria\\
+        s2010237032@fhooe.at
+    }
+}
+
+\maketitle
+
+\begin{abstract}
+Android has a huge library landscape, although it is difficult to choose the right one. Jetpack is a collection of libraries designed to make app development easier and decrease boilerplate code. Jetpack libraries use contemporary design approaches to reduce crashes and memory leaks. This paper gives a short insight into Android Jetpack, its major libraries and its benefits and drawbacks.
+\end{abstract}
+
+\input{chapters/introduction}
+\input{chapters/related_work/related_work}
+\input{chapters/android_jetpack/android_jetpack}
+\input{chapters/conclusion}
+
+\graphicspath{{images/}}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references} % Biblatex-Literaturdatei (references.bib)
+
+\end{document}
