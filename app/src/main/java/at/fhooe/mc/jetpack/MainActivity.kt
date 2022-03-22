@@ -11,6 +11,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
 import at.fhooe.mc.jetpack.Constants.HTTP_BASE_URL
 import at.fhooe.mc.jetpack.Constants.TAG
 import at.fhooe.mc.jetpack.ui.theme.JetpackComposeGitTheme
@@ -30,7 +31,7 @@ class MainActivity : ComponentActivity() {
         Log.d(TAG, "$TAG_MAIN_ACTIVITY::onCreate()")
 
         // network call on IO thread
-        GlobalScope.launch(Dispatchers.IO){
+        lifecycleScope.launch(Dispatchers.IO) {
             val blogPosts = blogApi.blogBlogPostsGet()
 
             // back to UI thread
