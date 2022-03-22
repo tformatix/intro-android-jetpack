@@ -1,21 +1,34 @@
 package at.fhooe.mc.jetpack
 
+
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import at.fhooe.mc.jetpack.Constants.HTTP_BASE_URL
 import at.fhooe.mc.jetpack.Constants.TAG
 import at.fhooe.mc.jetpack.ui.theme.JetpackComposeGitTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.openapitools.client.apis.BlogPostApi
+import androidx.annotation.StringRes
+import androidx.compose.foundation.background
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.*
+
 
 const val TAG_MAIN_ACTIVITY = "MainActivity"
 
@@ -44,13 +57,13 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen() {
+private fun MainScreen() {
 
     val navController = rememberNavController()
 
     val bottomNavItems = listOf(
-        BottomNavScreens.blog,
-        BottomNavScreens.settings)
+        BottomNavScreens.Blog,
+        BottomNavScreens.Settings)
 
     Scaffold(
         bottomBar = {
@@ -62,15 +75,19 @@ fun MainScreen() {
 }
 
 @Composable
-fun AppBottomNavigation(navController: NavHostController, bottomNavItems: List<BottomNavScreens>) {
+private fun AppBottomNavigation(navController: NavHostController, bottomNavItems: List<BottomNavScreens>) {
     BottomNavigation {
         val currentRoute = currentRoute(navController)
-        items.forEach { screen ->
+        bottomNavItems.forEach { screen ->
             BottomNavigationItem(
-                icon = { Icon(screen.icon) },
-                label = { Text(stringResource(id = screen.resourceId)) },
+                icon = {
+                        Icon(painter = painterResource(id = screen.icon),
+                             contentDescription = "Icons",
+                             tint = Color.White)
+                    },
+                label = { Text(screen.name) },
                 selected = currentRoute == screen.route,
-                alwaysShowLabels = false,
+                alwaysShowLabel = false,
                 onClick = {
                     if (currentRoute != screen.route) {
                         navController.navigate(screen.route)
@@ -81,6 +98,41 @@ fun AppBottomNavigation(navController: NavHostController, bottomNavItems: List<B
     }
 }
 
+@Composable
+private fun currentRoute(navController: NavHostController): String? {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    return navBackStackEntry?.arguments?.getString("KEY_ROUTE")
+}
+
+@Composable
+private fun MainScreenNavigationConfigurations(
+    navController: NavHostController
+) {
+    NavHost(navController, startDestination = BottomNavScreens.Blog.route) {
+        composable(BottomNavScreens.Blog.route) {
+            Blog()
+        }
+        composable(BottomNavScreens.Settings.route) {
+            Settings()
+        }
+    }
+}
+
+@Composable
+private fun Blog() {
+    Text("hey du")
+}
+
+@Composable
+private fun Settings() {
+    Text("i am settings")
+}
+
+/**
+ * function for previewing the MainScreen
+ */
 @Preview(showBackground = true)
 @Composable
-fun
+fun PreviewMain() {
+    MainScreen()
+}
