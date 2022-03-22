@@ -5,13 +5,13 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import at.fhooe.mc.jetpack.Constants.HTTP_BASE_URL
 import at.fhooe.mc.jetpack.Constants.TAG
 import at.fhooe.mc.jetpack.ui.theme.JetpackComposeGitTheme
@@ -38,10 +38,7 @@ class MainActivity : ComponentActivity() {
             runOnUiThread {
                 setContent {
                     JetpackComposeGitTheme {
-                        // A surface container using the 'background' color from the theme
-                        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-                            Greeting("Android")
-                        }
+                        MainScreen()
                     }
                 }
             }
@@ -50,14 +47,43 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+fun MainScreen() {
+
+    val navController = rememberNavController()
+
+    val bottomNavItems = listOf(
+        BottomNavScreens.blog,
+        BottomNavScreens.settings)
+
+    Scaffold(
+        bottomBar = {
+            AppBottomNavigation(navController, bottomNavItems)
+        },
+    ) {
+        MainScreenNavigationConfigurations(navController)
+    }
+}
+
+@Composable
+fun AppBottomNavigation(navController: NavHostController, bottomNavItems: List<BottomNavScreens>) {
+    BottomNavigation {
+        val currentRoute = currentRoute(navController)
+        items.forEach { screen ->
+            BottomNavigationItem(
+                icon = { Icon(screen.icon) },
+                label = { Text(stringResource(id = screen.resourceId)) },
+                selected = currentRoute == screen.route,
+                alwaysShowLabels = false,
+                onClick = {
+                    if (currentRoute != screen.route) {
+                        navController.navigate(screen.route)
+                    }
+                }
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
-    JetpackComposeGitTheme {
-        Greeting("Android")
-    }
-}
+fun
