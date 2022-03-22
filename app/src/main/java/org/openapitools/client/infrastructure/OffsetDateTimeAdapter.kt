@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter
  * CHANGED AND NOT GENERATED!!!
  */
 class OffsetDateTimeAdapter {
+
     @ToJson
     fun toJson(value: OffsetDateTime): String {
         return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(
