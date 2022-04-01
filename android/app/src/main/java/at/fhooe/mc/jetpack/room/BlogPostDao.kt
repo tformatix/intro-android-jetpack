@@ -3,6 +3,7 @@ package at.fhooe.mc.jetpack.room
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 /**
  * data access object for the blog post table
@@ -11,11 +12,11 @@ import androidx.room.Query
 @Dao
 interface BlogPostDao {
     /**
-     * @return all blog posts
+     * @return all blog posts (flow reacts on updates)
      * @see Query
      */
     @Query("SELECT * FROM blog_post")
-    fun getAll(): List<BlogPost>
+    fun getAll(): Flow<List<BlogPost>>
 
     /**
      * insert a range of blog posts

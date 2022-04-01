@@ -25,6 +25,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
+import androidx.room.Room
+import at.fhooe.mc.jetpack.room.AppDatabase
+import at.fhooe.mc.jetpack.room.BlogPost
+import java.time.OffsetDateTime
 
 
 const val TAG_MAIN_ACTIVITY = "MainActivity"
@@ -32,10 +36,14 @@ const val TAG_MAIN_ACTIVITY = "MainActivity"
 class MainActivity : ComponentActivity() {
 
     private val blogPostApi = BlogPostApi(HTTP_BASE_URL) // use for api calls
+    private lateinit var blogPostLocalDb: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "$TAG_MAIN_ACTIVITY::onCreate()")
+
+        // get local database for caching data
+        blogPostLocalDb = AppDatabase.getDatabase(this)
 
         // network call on IO thread
         lifecycleScope.launch(Dispatchers.IO) {
