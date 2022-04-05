@@ -23,9 +23,8 @@ import java.time.OffsetDateTime
 fun BlogScreen() {
     val blogPost = BlogPost(1, "Michael Zauner", "hallo \nwie gehds", OffsetDateTime.now())
     val blogPostApi = BlogPostApi(Constants.HTTP_BASE_URL) // use for api calls
-
-
-    val blogPosts = blogPostApi.blogPostGet()
+    //val blogPosts = blogPostApi.blogPostGet()
+    val blogPosts = listOf<BlogPostDto>()
     for (i in blogPosts) {
         MessageRow(i)
     }

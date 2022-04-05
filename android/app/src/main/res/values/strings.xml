@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">JetpackComposeGit</string>
+
+    <string name="screen_settings_txt_enter_user_name">Enter Username</string>
 </resources>
