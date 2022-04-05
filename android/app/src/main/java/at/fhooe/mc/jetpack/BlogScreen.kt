@@ -1,23 +1,31 @@
 package at.fhooe.mc.jetpack
 
-import android.hardware.camera2.params.ColorSpaceTransform
+import android.app.Application
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ComposeCompilerApi
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import at.fhooe.mc.jetpack.room.AppDatabase
 import at.fhooe.mc.jetpack.room.BlogPost
+import at.fhooe.mc.jetpack.room.BlogViewModel
 import at.fhooe.mc.jetpack.ui.theme.FHred
-import org.openapitools.client.apis.BlogPostApi
-import org.openapitools.client.models.BlogPostDto
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.forEach
+import kotlinx.coroutines.flow.observeOn
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.time.OffsetDateTime
 
 /**
@@ -25,18 +33,20 @@ import java.time.OffsetDateTime
  * @see Composable
  */
 @Composable
-fun BlogScreen() {
-    val blogPost = BlogPost(1, "Michael Zauner", "hallo \nwie gehds", OffsetDateTime.now())
-    val blogPostApi = BlogPostApi(Constants.HTTP_BASE_URL) // use for api calls
-    val blogPost1 = BlogPost(1, "Michael Zauner", "hallo \nwie gehds", OffsetDateTime.now())
-    val blogPost2 = BlogPost(1, "Michael Zauner", "hallo \nwie gehds", OffsetDateTime.now())
-    val blogPost3 = BlogPost(1, "Michael Zauner", "hallo \nwie gehds", OffsetDateTime.now())
+fun BlogScreen(viewModel: BlogViewModel =
+                   BlogViewModel(LocalContext.current.applicationContext as Application)) {
+    val coroutineScope = rememberCoroutineScope()
 
-    val list = listOf(blogPost1, blogPost2, blogPost3)
+    val list = AppDatabase.getDatabase(LocalContext.current).blogPostDao().getAll()
 
-    Column {
-        list.forEach { message -> MessageRow(blogPost = message) }
-    }
+    /*coroutineScope.launch {
+        withContext(Dispatchers.IO) {
+            viewModel.allBlogs.collect {
+                it
+            }
+        }
+    }*/
+
 }
 
 /**
@@ -52,7 +62,10 @@ fun MessageRow(blogPost: BlogPost) {
         modifier = Modifier.padding(vertical = 2.5.dp, horizontal = 4.dp),
         shape = shape
     ) {
-        Row(Modifier.fillMaxWidth().padding(4.dp)) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(4.dp)) {
             Column(modifier = Modifier
                 .padding(4.dp)) {
 
@@ -84,7 +97,6 @@ fun MessageRow(blogPost: BlogPost) {
                 }
             }
         }
-
     }
 }
 

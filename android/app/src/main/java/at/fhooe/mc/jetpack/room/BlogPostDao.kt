@@ -1,8 +1,6 @@
 package at.fhooe.mc.jetpack.room
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -22,7 +20,7 @@ interface BlogPostDao {
      * insert a range of blog posts
      * @see Insert
      */
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg blogPosts: BlogPost)
 
     /**
