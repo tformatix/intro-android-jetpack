@@ -45,8 +45,14 @@ class MainActivity : ComponentActivity() {
         // get local database for caching data
         blogPostLocalDb = AppDatabase.getDatabase(this)
 
+        setContent {
+            JetpackComposeGitTheme {
+                MainScreen()
+            }
+        }
+
         // network call on IO thread
-        lifecycleScope.launch(Dispatchers.IO) {
+        /*lifecycleScope.launch(Dispatchers.IO) {
             val blogPosts = blogPostApi.blogPostGet()
 
             // back to UI thread
@@ -57,7 +63,7 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-        }
+        }*/
     }
 }
 
