@@ -22,7 +22,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "$TAG_MAIN_ACTIVITY::onCreate()")
-
         setContent {
             JetpackComposeGitTheme {
                 MainScreen()
