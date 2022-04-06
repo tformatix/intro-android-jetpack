@@ -6,9 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,18 +33,11 @@ import java.time.OffsetDateTime
 @Composable
 fun BlogScreen(viewModel: BlogViewModel =
                    BlogViewModel(LocalContext.current.applicationContext as Application)) {
-    val coroutineScope = rememberCoroutineScope()
+    val list: List<BlogPost> by viewModel.allBlogs.collectAsState(initial = emptyList())
 
-    val list = AppDatabase.getDatabase(LocalContext.current).blogPostDao().getAll()
-
-    /*coroutineScope.launch {
-        withContext(Dispatchers.IO) {
-            viewModel.allBlogs.collect {
-                it
-            }
-        }
-    }*/
-
+    Column {
+        list.forEach { message -> MessageRow(blogPost = message) }
+    }
 }
 
 /**

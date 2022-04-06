@@ -36,6 +36,10 @@ class MainActivity : ComponentActivity() {
         Log.d(TAG, "$TAG_MAIN_ACTIVITY::onCreate()")
         setContent {
             JetpackComposeGitTheme {
+
+                // get blog messages from api when activity got created
+                getBlogs(applicationContext)
+
                 MainScreen()
             }
         }
