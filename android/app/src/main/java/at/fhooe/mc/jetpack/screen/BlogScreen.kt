@@ -1,11 +1,14 @@
-package at.fhooe.mc.jetpack
+package at.fhooe.mc.jetpack.screen
 
 import android.app.Application
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,16 +16,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import at.fhooe.mc.jetpack.room.AppDatabase
+import at.fhooe.mc.jetpack.BlogManager
 import at.fhooe.mc.jetpack.room.BlogPost
 import at.fhooe.mc.jetpack.room.BlogViewModel
 import at.fhooe.mc.jetpack.ui.theme.FHred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.forEach
-import kotlinx.coroutines.flow.observeOn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.time.OffsetDateTime
 
@@ -35,8 +34,30 @@ fun BlogScreen(viewModel: BlogViewModel =
                    BlogViewModel(LocalContext.current.applicationContext as Application)) {
     val list: List<BlogPost> by viewModel.allBlogs.collectAsState(initial = emptyList())
 
-    Column {
-        list.forEach { message -> MessageRow(blogPost = message) }
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val username = BlogManager.getUsername(context)
+
+    Scaffold(
+        bottomBar = { MessageBox() },
+        floatingActionButton = {
+            FloatingActionButton(backgroundColor = FHred, onClick = {
+                coroutineScope.launch {
+                    withContext(Dispatchers.IO) {
+                        BlogManager.getBlogs(context)
+                    }
+                }
+            }) {
+                Icon(Icons.Filled.Refresh,"")
+            }
+        },
+        floatingActionButtonPosition = FabPosition.End
+    ) {
+        LazyColumn(modifier = Modifier.fillMaxSize(1F)) {
+            items(list) { item ->
+                MessageRow(blogPost = item, username)
+            }
+        }
     }
 }
 
@@ -45,7 +66,7 @@ fun BlogScreen(viewModel: BlogViewModel =
  * @see Composable
  */
 @Composable
-fun MessageRow(blogPost: BlogPost) {
+fun MessageRow(blogPost: BlogPost, localUsername: String) {
     val shape = RoundedCornerShape(4.dp)
 
     Surface(
@@ -62,21 +83,20 @@ fun MessageRow(blogPost: BlogPost) {
 
                 // username
                 blogPost.userName?.let {
-                    Text(
-                        it,
-                        color = FHred,
-                    )
+                    if (localUsername == it) {
+                        Text(it, color = Color.Blue)
+                    }
+                    else {
+                        Text(it, color = FHred)
+                    }
                 }
 
                 // message
                 blogPost.message?.let {
-                    Text(
-                        it,
-                        color = Color.White
-                    )
+                    Text(it, color = Color.White)
                 }
             }
-            Column(horizontalAlignment = Alignment.End) {
+            /*Column(horizontalAlignment = Alignment.End) {
                 val dateTime = blogPost.postedDateTime?.let { formatDateTime(it) }
 
                 if (dateTime != null) {
@@ -86,7 +106,44 @@ fun MessageRow(blogPost: BlogPost) {
                         fontSize = 10.sp
                     )
                 }
+            }*/
+        }
+    }
+}
+
+/**
+ * Box at the bottom bar where the user can enter a message
+ * and a send button
+ * @see Compos */
+@Composable
+fun MessageBox() {
+    var text by remember { mutableStateOf("")}
+
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    Row {
+        TextField(
+            value = text,
+            onValueChange = { text = it },
+            placeholder = { Text(text = "Enter Message ...") }
+        )
+        
+        IconButton(onClick = {
+            coroutineScope.launch(Dispatchers.IO) {
+                if (text.isNotEmpty()) {
+                    // post message
+                    BlogManager.postMessage(text, context)
+
+                    // fetch changes and update local db
+                    BlogManager.getBlogs(context)
+
+                    // reset Message
+                    text = ""
+                }
             }
+        }) {
+            Icon(Icons.Filled.Send, "")
         }
     }
 }

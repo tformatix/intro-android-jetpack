@@ -1,4 +1,4 @@
-package at.fhooe.mc.jetpack
+package at.fhooe.mc.jetpack.screen
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -16,6 +16,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import at.fhooe.mc.jetpack.Constants
+import at.fhooe.mc.jetpack.R
 
 /**
  * settings screen
