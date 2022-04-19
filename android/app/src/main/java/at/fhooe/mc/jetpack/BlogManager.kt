@@ -71,6 +71,6 @@ object BlogManager {
             Context.MODE_PRIVATE
         )
 
-        return sharedPrefs.getString(Constants.SHARED_PREFS_USER_NAME, "hubert").orEmpty()
+        return sharedPrefs.getString(Constants.SHARED_PREFS_USER_NAME, "").orEmpty()
     }
 }

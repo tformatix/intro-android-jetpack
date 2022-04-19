@@ -53,7 +53,7 @@ fun BlogScreen(viewModel: BlogViewModel =
         },
         floatingActionButtonPosition = FabPosition.End
     ) {
-        LazyColumn(modifier = Modifier.fillMaxSize(1F)) {
+        LazyColumn(modifier = Modifier.padding(it)) {
             items(list) { item ->
                 MessageRow(blogPost = item, username)
             }
@@ -114,21 +114,22 @@ fun MessageRow(blogPost: BlogPost, localUsername: String) {
 /**
  * Box at the bottom bar where the user can enter a message
  * and a send button
- * @see Compos */
+ * @see Composable */
 @Composable
 fun MessageBox() {
-    var text by remember { mutableStateOf("")}
+    var text by remember { mutableStateOf("") }
 
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    Row {
+    Row() {
         TextField(
             value = text,
             onValueChange = { text = it },
-            placeholder = { Text(text = "Enter Message ...") }
+            placeholder = { Text(text = "Enter Message ...") },
+            modifier = Modifier.weight(1f)
         )
-        
+
         IconButton(onClick = {
             coroutineScope.launch(Dispatchers.IO) {
                 if (text.isNotEmpty()) {
@@ -146,13 +147,15 @@ fun MessageBox() {
             Icon(Icons.Filled.Send, "")
         }
     }
-}
 
-/**
- * display a shorter version of the offsetDateTime from the BlogPost object
- * @param dateTime of the blogPost entry
- * @return compressed version of dateTime
- */
-fun formatDateTime(dateTime: OffsetDateTime): String {
-    return "${dateTime.dayOfMonth}-${dateTime.monthValue}-${dateTime.year} ${dateTime.hour}:${dateTime.minute}"
+    /**
+     * display a shorter version of the offsetDateTime from the BlogPost object
+     * @param dateTime of the blogPost entry
+     * @return compressed version of dateTime
+     */
+    fun formatDateTime(dateTime: OffsetDateTime): String {
+        return "${dateTime.dayOfMonth}-${dateTime.monthValue}-${dateTime.year} ${dateTime.hour}:${dateTime.minute}"
+    }
+
+
 }
