@@ -6,15 +6,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import at.fhooe.mc.jetpack.Constants
 import at.fhooe.mc.jetpack.R
@@ -32,10 +33,11 @@ fun SettingsScreen() {
     var userName by remember {
         mutableStateOf(
             TextFieldValue(
-                sharedPrefs.getString(Constants.SHARED_PREFS_USER_NAME, null) ?: ""
+                text = sharedPrefs.getString(Constants.SHARED_PREFS_USER_NAME, null) ?: ""
             )
         )
     }
+    val isError = userName.text.isEmpty()
 
     Column(
         modifier = Modifier
@@ -50,8 +52,23 @@ fun SettingsScreen() {
             label = {
                 Text(stringResource(R.string.screen_settings_txt_enter_user_name))
             },
-            modifier = Modifier.fillMaxWidth()
+            trailingIcon = {
+                if (isError)
+                    Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colors.error)
+            },
+            modifier = Modifier.fillMaxWidth(),
+            isError = isError
         )
+
+        // error text
+        if(isError) {
+            Text(
+                text = stringResource(R.string.screen_settings_txt_error),
+                color = MaterialTheme.colors.error,
+                style = MaterialTheme.typography.caption,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
 
         // save button
         Button(
@@ -60,7 +77,8 @@ fun SettingsScreen() {
                     .putString(Constants.SHARED_PREFS_USER_NAME, userName.text)
                     .apply()
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !isError
         ) {
             Text(stringResource(R.string.screen_settings_btn_save))
         }

@@ -108,7 +108,13 @@ private fun currentRoute(navController: NavHostController): String? {
 private fun MainScreenNavigationConfigurations(
     navController: NavHostController
 ) {
-    NavHost(navController, startDestination = BottomNavScreens.Blog.route) {
+    val startDestination =
+        if (BlogManager.getUsername(LocalContext.current).isEmpty())
+            BottomNavScreens.Settings.route
+        else
+            BottomNavScreens.Blog.route
+
+    NavHost(navController, startDestination = startDestination) {
         composable(BottomNavScreens.Blog.route) {
             BlogScreen()
         }
