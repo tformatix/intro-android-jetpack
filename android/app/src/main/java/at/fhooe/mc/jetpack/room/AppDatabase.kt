@@ -6,6 +6,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
+/**
+ * name of room database
+ */
 const val DB_NAME = "blog_db"
 
 /**
@@ -25,7 +28,7 @@ abstract class AppDatabase: RoomDatabase() {
 
     companion object {
         /**
-         * Singleton prevents multiple instances of database opening at the same time.
+         * singleton prevents multiple instances of database opening at the same time
          * @see Volatile
          */
         @Volatile
@@ -33,10 +36,11 @@ abstract class AppDatabase: RoomDatabase() {
 
         /**
          * @param context current context
-         * @return database object
+         * @return database object (singleton)
          */
         fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
+                // create new instance
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,

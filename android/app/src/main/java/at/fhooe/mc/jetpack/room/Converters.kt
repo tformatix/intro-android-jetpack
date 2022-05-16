@@ -4,7 +4,7 @@ import androidx.room.TypeConverter
 import java.time.OffsetDateTime
 
 /**
- * converts complex data types to savable data types
+ * converts complex data types to savable data types or vice versa
  */
 class Converters {
 
