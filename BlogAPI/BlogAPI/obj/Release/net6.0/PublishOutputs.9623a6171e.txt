@@ -1,0 +1,11 @@
+C:\00_Work\Projects\FH\4_SS\WIA\JetpackCompose\BlogAPI\BlogAPI\bin\Release\net6.0\publish\BlogAPI.exe
+C:\00_Work\Projects\FH\4_SS\WIA\JetpackCompose\BlogAPI\BlogAPI\bin\Release\net6.0\publish\appsettings.Development.json
+C:\00_Work\Projects\FH\4_SS\WIA\JetpackCompose\BlogAPI\BlogAPI\bin\Release\net6.0\publish\appsettings.json
+C:\00_Work\Projects\FH\4_SS\WIA\JetpackCompose\BlogAPI\BlogAPI\bin\Release\net6.0\publish\BlogAPI.dll
+C:\00_Work\Projects\FH\4_SS\WIA\JetpackCompose\BlogAPI\BlogAPI\bin\Release\net6.0\publish\BlogAPI.deps.json
+C:\00_Work\Projects\FH\4_SS\WIA\JetpackCompose\BlogAPI\BlogAPI\bin\Release\net6.0\publish\BlogAPI.runtimeconfig.json
+C:\00_Work\Projects\FH\4_SS\WIA\JetpackCompose\BlogAPI\BlogAPI\bin\Release\net6.0\publish\BlogAPI.pdb
+C:\00_Work\Projects\FH\4_SS\WIA\JetpackCompose\BlogAPI\BlogAPI\bin\Release\net6.0\publish\Microsoft.OpenApi.dll
+C:\00_Work\Projects\FH\4_SS\WIA\JetpackCompose\BlogAPI\BlogAPI\bin\Release\net6.0\publish\Swashbuckle.AspNetCore.Swagger.dll
+C:\00_Work\Projects\FH\4_SS\WIA\JetpackCompose\BlogAPI\BlogAPI\bin\Release\net6.0\publish\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\00_Work\Projects\FH\4_SS\WIA\JetpackCompose\BlogAPI\BlogAPI\bin\Release\net6.0\publish\Swashbuckle.AspNetCore.SwaggerUI.dll
