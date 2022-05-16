@@ -30,6 +30,7 @@ object BlogManager {
                     BlogPost(it, i.userName, i.message, i.postedDateTime)
                 }
 
+                // insert blog messages in room db
                 blogPost?.let {
                     AppDatabase.getDatabase(current).blogPostDao().insertAll(it)
                 }

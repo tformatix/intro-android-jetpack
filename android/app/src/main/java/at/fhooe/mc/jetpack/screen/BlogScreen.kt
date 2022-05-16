@@ -26,22 +26,29 @@ import kotlinx.coroutines.withContext
 import java.time.OffsetDateTime
 
 /**
- * composable functions for the Blog screen
+ * Blog screen
+ * user can read and write message to the blog
  * @see Composable
  */
 @Composable
 fun BlogScreen(viewModel: BlogViewModel =
                    BlogViewModel(LocalContext.current.applicationContext as Application)) {
+
+    // collect changes from the viewModel
     val list: List<BlogPost> by viewModel.allBlogs.collectAsState(initial = emptyList())
 
+    // get CoroutineScope because message receive need to be in a different thread
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     val username = BlogManager.getUsername(context)
 
+    // scaffold is used to separate the screen in multiple parts (top, center, bottom,...)
     Scaffold(
         bottomBar = { MessageBox() },
         floatingActionButton = {
             FloatingActionButton(backgroundColor = FHred, onClick = {
+
+                // refresh button is pressed, get changes from the backend
                 coroutineScope.launch {
                     withContext(Dispatchers.IO) {
                         BlogManager.getBlogs(context)
@@ -53,6 +60,7 @@ fun BlogScreen(viewModel: BlogViewModel =
         },
         floatingActionButtonPosition = FabPosition.End
     ) {
+        // create a "scrollable list" from the messages
         LazyColumn(modifier = Modifier.padding(it)) {
             items(list) { item ->
                 MessageRow(blogPost = item, username)
@@ -62,13 +70,15 @@ fun BlogScreen(viewModel: BlogViewModel =
 }
 
 /**
- * display each blog message in an own surface
+ * display each message in a single row (with a surface)
  * @see Composable
  */
 @Composable
 fun MessageRow(blogPost: BlogPost, localUsername: String) {
     val shape = RoundedCornerShape(4.dp)
 
+    // message has a round background shape
+    // set background color to primary (light/dark different)
     Surface(
         color = MaterialTheme.colors.primary,
         modifier = Modifier.padding(vertical = 2.5.dp, horizontal = 4.dp),
@@ -81,8 +91,10 @@ fun MessageRow(blogPost: BlogPost, localUsername: String) {
             Column(modifier = Modifier
                 .padding(4.dp)) {
 
-                // username
+                // color message from the user himself in a different color
                 blogPost.userName?.let {
+
+                    // name matching based on local username (stored in shared preferences)
                     if (localUsername == it) {
                         Text(it, color = Color.Blue)
                     }
@@ -91,7 +103,6 @@ fun MessageRow(blogPost: BlogPost, localUsername: String) {
                     }
                 }
 
-                // message
                 blogPost.message?.let {
                     Text(it, color = Color.White)
                 }
@@ -106,12 +117,15 @@ fun MessageRow(blogPost: BlogPost, localUsername: String) {
  * @see Composable */
 @Composable
 fun MessageBox() {
+    // listener of the entered text
     var text by remember { mutableStateOf("") }
 
+    // get CoroutineScope because message sent need to be in a different thread
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
     Row() {
+        // textField where the user can enter a message
         TextField(
             value = text,
             onValueChange = { text = it },
@@ -120,15 +134,16 @@ fun MessageBox() {
         )
 
         IconButton(onClick = {
+            // launch coroutine and post/fetch changes
             coroutineScope.launch(Dispatchers.IO) {
                 if (text.isNotEmpty()) {
-                    // post message
+                    // send POST request to the backend
                     BlogManager.postMessage(text, context)
 
-                    // fetch changes and update local db
+                    // update changes and update local db
                     BlogManager.getBlogs(context)
 
-                    // reset Message
+                    // reset entered message
                     text = ""
                 }
             }

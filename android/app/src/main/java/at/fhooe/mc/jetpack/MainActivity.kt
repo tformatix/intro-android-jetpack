@@ -1,6 +1,5 @@
 package at.fhooe.mc.jetpack
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -12,7 +11,6 @@ import at.fhooe.mc.jetpack.ui.theme.JetpackComposeGitTheme
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -21,19 +19,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
-import at.fhooe.mc.jetpack.room.AppDatabase
-import at.fhooe.mc.jetpack.room.BlogPost
 import at.fhooe.mc.jetpack.screen.BlogScreen
 import at.fhooe.mc.jetpack.screen.SettingsScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.openapitools.client.apis.BlogPostApi
-import java.net.SocketTimeoutException
 
+// log variable
 const val TAG_MAIN_ACTIVITY = "MainActivity"
 
+/**
+ * declare MainActivity as Compose Activity
+ * @see ComponentActivity
+ */
 class MainActivity : ComponentActivity() {
 
+    // fetch all BlogPosts from backend and start MainScreen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "$TAG_MAIN_ACTIVITY::onCreate()")
@@ -51,8 +51,13 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+/**
+ * MainScreen with bottom navigation
+ */
 @Composable
 private fun MainScreen() {
+
+    // navigation controller
     val navController = rememberNavController()
 
     val bottomNavItems = listOf(
@@ -60,6 +65,7 @@ private fun MainScreen() {
         BottomNavScreens.Settings
     )
 
+    // set bottom navigation view
     Scaffold(
         bottomBar = {
             AppBottomNavigation(navController, bottomNavItems)
@@ -72,6 +78,12 @@ private fun MainScreen() {
     }
 }
 
+/**
+ * declare how a screen looks in the bottom navigation view
+ * set icon, text, colors, ...
+ * @param navController navigation controller
+ * @param bottomNavItems list of the navigation screens
+ */
 @Composable
 private fun AppBottomNavigation(navController: NavHostController, bottomNavItems: List<BottomNavScreens>) {
     BottomNavigation {
@@ -98,16 +110,26 @@ private fun AppBottomNavigation(navController: NavHostController, bottomNavItems
     }
 }
 
+/**
+ * get the current destination of the navController
+ * @param navController navigation controller
+ */
 @Composable
 private fun currentRoute(navController: NavHostController): String? {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     return navBackStackEntry?.arguments?.getString("KEY_ROUTE")
 }
 
+/**
+ * configuration of the main screen navigation
+ * e.g.: order of the navigation items, startdestination
+ * @param navController navigation controller
+ */
 @Composable
 private fun MainScreenNavigationConfigurations(
     navController: NavHostController
 ) {
+    // when the user has no username stored, start with the settings page
     val startDestination =
         if (BlogManager.getUsername(LocalContext.current).isEmpty())
             BottomNavScreens.Settings.route
