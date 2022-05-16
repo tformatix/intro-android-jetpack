@@ -96,17 +96,6 @@ fun MessageRow(blogPost: BlogPost, localUsername: String) {
                     Text(it, color = Color.White)
                 }
             }
-            /*Column(horizontalAlignment = Alignment.End) {
-                val dateTime = blogPost.postedDateTime?.let { formatDateTime(it) }
-
-                if (dateTime != null) {
-                    Text(
-                        text = dateTime,
-                        color = Color.Yellow,
-                        fontSize = 10.sp
-                    )
-                }
-            }*/
         }
     }
 }
@@ -147,15 +136,4 @@ fun MessageBox() {
             Icon(Icons.Filled.Send, "")
         }
     }
-
-    /**
-     * display a shorter version of the offsetDateTime from the BlogPost object
-     * @param dateTime of the blogPost entry
-     * @return compressed version of dateTime
-     */
-    fun formatDateTime(dateTime: OffsetDateTime): String {
-        return "${dateTime.dayOfMonth}-${dateTime.monthValue}-${dateTime.year} ${dateTime.hour}:${dateTime.minute}"
-    }
-
-
 }
