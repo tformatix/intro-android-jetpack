@@ -60,12 +60,7 @@ fun BlogScreen(viewModel: BlogViewModel =
         },
         floatingActionButtonPosition = FabPosition.End
     ) {
-        // create a "scrollable list" from the messages
-        LazyColumn(modifier = Modifier.padding(it)) {
-            items(list) { item ->
-                MessageRow(blogPost = item, username)
-            }
-        }
+        // TODO: create a "scrollable list" from the messages
     }
 }
 
@@ -75,40 +70,7 @@ fun BlogScreen(viewModel: BlogViewModel =
  */
 @Composable
 fun MessageRow(blogPost: BlogPost, localUsername: String) {
-    val shape = RoundedCornerShape(4.dp)
-
-    // message has a round background shape
-    // set background color to primary (light/dark different)
-    Surface(
-        color = MaterialTheme.colors.primary,
-        modifier = Modifier.padding(vertical = 2.5.dp, horizontal = 4.dp),
-        shape = shape
-    ) {
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(4.dp)) {
-            Column(modifier = Modifier
-                .padding(4.dp)) {
-
-                // color message from the user himself in a different color
-                blogPost.userName?.let {
-
-                    // name matching based on local username (stored in shared preferences)
-                    if (localUsername == it) {
-                        Text(it, color = Color.Blue)
-                    }
-                    else {
-                        Text(it, color = FHred)
-                    }
-                }
-
-                blogPost.message?.let {
-                    Text(it, color = Color.White)
-                }
-            }
-        }
-    }
+    // TODO: implement a composable function, which displays a single message
 }
 
 /**
@@ -117,38 +79,5 @@ fun MessageRow(blogPost: BlogPost, localUsername: String) {
  * @see Composable */
 @Composable
 fun MessageBox() {
-    // listener of the entered text
-    var text by remember { mutableStateOf("") }
-
-    // get CoroutineScope because message sent need to be in a different thread
-    val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
-
-    Row() {
-        // textField where the user can enter a message
-        TextField(
-            value = text,
-            onValueChange = { text = it },
-            placeholder = { Text(text = "Enter Message ...") },
-            modifier = Modifier.weight(1f)
-        )
-
-        IconButton(onClick = {
-            // launch coroutine and post/fetch changes
-            coroutineScope.launch(Dispatchers.IO) {
-                if (text.isNotEmpty()) {
-                    // send POST request to the backend
-                    BlogManager.postMessage(text, context)
-
-                    // update changes and update local db
-                    BlogManager.getBlogs(context)
-
-                    // reset entered message
-                    text = ""
-                }
-            }
-        }) {
-            Icon(Icons.Filled.Send, "")
-        }
-    }
+    // TODO: implement a box at the bottom bar, where the user can enter a new message
 }
