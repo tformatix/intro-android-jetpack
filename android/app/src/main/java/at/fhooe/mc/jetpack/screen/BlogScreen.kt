@@ -60,7 +60,7 @@ fun BlogScreen(viewModel: BlogViewModel =
         },
         floatingActionButtonPosition = FabPosition.End
     ) {
-        // TODO: create a "scrollable list" from the messages
+        // TODO: create a "scrollable list" of the messages
     }
 }
 
