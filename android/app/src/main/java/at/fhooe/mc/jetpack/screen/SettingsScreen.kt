@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -31,19 +32,27 @@ fun SettingsScreen() {
         Context.MODE_PRIVATE
     )
 
+    // name stored in shared preferences
+    val sharedPreferencesName = sharedPrefs.getString(Constants.SHARED_PREFS_USER_NAME, null)
+
     // by ... declares a delegated property (provides the value of a property and handles its changes)
     // remember ... keeps a value (any value) consistent across recompositions
     // MutableState ... holds a value, where Compose will automatically observe changes to the value
     var userName by remember {
         mutableStateOf(
             TextFieldValue(
-                text = sharedPrefs.getString(Constants.SHARED_PREFS_USER_NAME, null) ?: ""
+                text = sharedPreferencesName ?: ""
             )
         )
     }
 
     // should display error message?
     val isError = userName.text.isEmpty()
+
+    // is username saved to shared preferences
+    var isSaved by remember {
+        mutableStateOf(sharedPreferencesName != null)
+    }
 
     // children in vertical sequence
     Column(
@@ -55,7 +64,10 @@ fun SettingsScreen() {
         // input text for entering username (outlined styling)
         OutlinedTextField(
             value = userName,
-            onValueChange = { userName = it },
+            onValueChange = {
+                userName = it
+                isSaved = it.text == sharedPreferencesName
+            },
             label = {
                 // placeholder
                 Text(stringResource(R.string.screen_settings_txt_enter_user_name))
@@ -63,13 +75,15 @@ fun SettingsScreen() {
             trailingIcon = {
                 // error icon
                 if (isError)
-                    Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colors.error)
+                    Icon(Icons.Filled.Error, "error", tint = MaterialTheme.colors.error)
+                else if(isSaved)
+                    Icon(Icons.Filled.Done, "saved", tint = MaterialTheme.colors.primary)
             },
             modifier = Modifier.fillMaxWidth(),
             isError = isError
         )
 
-        if(isError) {
+        if (isError) {
             // error text
             Text(
                 text = stringResource(R.string.screen_settings_txt_error),
@@ -85,6 +99,7 @@ fun SettingsScreen() {
                 sharedPrefs.edit()
                     .putString(Constants.SHARED_PREFS_USER_NAME, userName.text)
                     .apply()
+                isSaved = true
             },
             modifier = Modifier.fillMaxWidth(),
             enabled = !isError
