@@ -31,8 +31,10 @@ import java.time.OffsetDateTime
  * @see Composable
  */
 @Composable
-fun BlogScreen(viewModel: BlogViewModel =
-                   BlogViewModel(LocalContext.current.applicationContext as Application)) {
+fun BlogScreen(
+    viewModel: BlogViewModel =
+        BlogViewModel(LocalContext.current.applicationContext as Application)
+) {
 
     // collect changes from the viewModel
     val list: List<BlogPost> by viewModel.allBlogs.collectAsState(initial = emptyList())
@@ -55,7 +57,7 @@ fun BlogScreen(viewModel: BlogViewModel =
                     }
                 }
             }) {
-                Icon(Icons.Filled.Refresh,"")
+                Icon(Icons.Filled.Refresh, "")
             }
         },
         floatingActionButtonPosition = FabPosition.End
@@ -84,28 +86,24 @@ fun MessageRow(blogPost: BlogPost, localUsername: String) {
         modifier = Modifier.padding(vertical = 2.5.dp, horizontal = 4.dp),
         shape = shape
     ) {
-        Row(
-            Modifier
+        Column(
+            modifier = Modifier
                 .fillMaxWidth()
-                .padding(4.dp)) {
-            Column(modifier = Modifier
-                .padding(4.dp)) {
+                .padding(8.dp)
+        ) {
+            // color message from the user himself in a different color
+            blogPost.userName?.let {
 
-                // color message from the user himself in a different color
-                blogPost.userName?.let {
-
-                    // name matching based on local username (stored in shared preferences)
-                    if (localUsername == it) {
-                        Text(it, color = Color.Blue)
-                    }
-                    else {
-                        Text(it, color = FHred)
-                    }
+                // name matching based on local username (stored in shared preferences)
+                if (localUsername == it) {
+                    Text(it, color = Color.Blue)
+                } else {
+                    Text(it, color = FHred)
                 }
+            }
 
-                blogPost.message?.let {
-                    Text(it, color = Color.White)
-                }
+            blogPost.message?.let {
+                Text(it, color = Color.White)
             }
         }
     }
