@@ -77,14 +77,12 @@ fun BlogScreen(
  */
 @Composable
 fun MessageRow(blogPost: BlogPost, localUsername: String) {
-    val shape = RoundedCornerShape(4.dp)
-
     // message has a round background shape
     // set background color to primary (light/dark different)
     Surface(
         color = MaterialTheme.colors.primary,
         modifier = Modifier.padding(vertical = 2.5.dp, horizontal = 4.dp),
-        shape = shape
+        shape = RoundedCornerShape(4.dp)
     ) {
         Column(
             modifier = Modifier
