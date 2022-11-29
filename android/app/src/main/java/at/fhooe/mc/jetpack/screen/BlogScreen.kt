@@ -62,12 +62,7 @@ fun BlogScreen(
         },
         floatingActionButtonPosition = FabPosition.End
     ) {
-        // create a "scrollable list" from the messages
-        LazyColumn(modifier = Modifier.padding(it)) {
-            items(list) { item ->
-                MessageRow(blogPost = item, username)
-            }
-        }
+        // TODO: create a "scrollable list" of the messages
     }
 }
 
@@ -113,38 +108,5 @@ fun MessageRow(blogPost: BlogPost, localUsername: String) {
  * @see Composable */
 @Composable
 fun MessageBox() {
-    // listener of the entered text
-    var text by remember { mutableStateOf("") }
-
-    // get CoroutineScope because message sent need to be in a different thread
-    val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
-
-    Row() {
-        // textField where the user can enter a message
-        TextField(
-            value = text,
-            onValueChange = { text = it },
-            placeholder = { Text(text = "Enter Message ...") },
-            modifier = Modifier.weight(1f)
-        )
-
-        IconButton(onClick = {
-            // launch coroutine and post/fetch changes
-            coroutineScope.launch(Dispatchers.IO) {
-                if (text.isNotEmpty()) {
-                    // send POST request to the backend
-                    BlogManager.postMessage(text, context)
-
-                    // update changes and update local db
-                    BlogManager.getBlogs(context)
-
-                    // reset entered message
-                    text = ""
-                }
-            }
-        }) {
-            Icon(Icons.Filled.Send, "")
-        }
-    }
+    // TODO: implement a box at the bottom bar, where the user can enter a new message
 }
